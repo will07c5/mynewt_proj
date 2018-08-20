@@ -26,10 +26,8 @@ syscfg.vals:
     # Disable unused eddystone feature.
     BLE_EDDYSTONE: 0
 
-    # Log reboot messages to a flash circular buffer.
-    REBOOT_LOG_FCB: 1
-    LOG_FCB: 1
-    CONFIG_FCB: 1
+    # Log everything.
+    LOG_LEVEL: 0
 
     # Set public device address.
     BLE_PUBLIC_DEV_ADDR: ((uint8_t[6]){0xcc, 0xbb, 0xaa, 0x33, 0x22, 0x11})

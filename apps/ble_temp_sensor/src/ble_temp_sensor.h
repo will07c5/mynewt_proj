@@ -17,11 +17,10 @@
  * under the License.
  */
 
-#ifndef H_BLEHR_SENSOR_
-#define H_BLEHR_SENSOR_
+#ifndef H_BLE_TEMP_SENSOR_
+#define H_BLE_TEMP_SENSOR_
 
-#include "log/log.h"
-#include "nimble/ble.h"
+#include <log/log.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,14 +28,11 @@ extern "C" {
 
 extern struct log logger;
 
-/* blehr uses the first "peruser" log module */
+/* Use the first "per user" log module slot for ble_temp_sensor module. */
 #define LOG_MODULE (LOG_MODULE_PERUSER + 0)
 
-/* Convenience macro for logging to the blerh module */
-#define LOG(lvl, ...) \
-    LOG_ ## lvl(&logger, LOG_MODULE, __VA_ARGS__)
-
-int gatt_svr_init(void);
+/* Convenience macro for logging to the ble_temp_sensor module. */
+#define LOG(lvl, ...) LOG_ ## lvl(&logger, LOG_MODULE, __VA_ARGS__)
 
 #ifdef __cplusplus
 }
