@@ -76,4 +76,3 @@ Here is some sample serial console output from a typical client session:
 001578 [ts=12328104ssb, mod=64 level=1] read value=2850
 001970 [ts=15390600ssb, mod=64 level=1] disconnect; reason=531
 ```
-
