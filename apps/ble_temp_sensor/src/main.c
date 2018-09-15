@@ -21,18 +21,20 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-#include "../../ble_temp_sensor/src/ble_temp_sens.h"
-#include "os/mynewt.h"
-#include "console/console.h"
-#include "config/config.h"
-#include "nimble/ble.h"
-#include "host/ble_hs.h"
-#include "services/gap/ble_svc_gap.h"
-#include "nrf_temp.h"
+
+#include <nrf_temp.h>
+
+#include <os/mynewt.h>
+#include <nimble/ble.h>
+#include <host/ble_hs.h>
+#include <services/gap/ble_svc_gap.h>
+
+#include "ble_temp_sensor.h"
+#include "gatt_svr.h"
 
 /* Log data */
 struct log logger;
-\
+
 static const char *device_name = "ble_temp_sensor";
 
 static int ble_temp_gap_event(struct ble_gap_event *event, void *arg);
@@ -150,7 +152,7 @@ on_sync(void)
     /* Begin advertising */
     ble_temp_advertise();
 
-    LOG(INFO,"Started advertising\n");
+    LOG(INFO, "adv started\n");
 }
 
 /*
@@ -169,11 +171,15 @@ main(void)
     /* Initialize OS */
     sysinit();
 
-    /* Initialize the blehr log */
-    log_register("ble_temp_sens_log", &logger, &log_console_handler, NULL,
-                    LOG_SYSLEVEL);
+    /* Initialize the logger */
+    log_register("ble_temp_sensor_log", &logger, &log_console_handler, NULL, LOG_SYSLEVEL);
 
+    /* Prepare the internal temperature module for measurement */
+    nrf_temp_init();
+
+    /* Prepare BLE host and GATT server */
     ble_hs_cfg.sync_cb = on_sync;
+    ble_hs_cfg.gatts_register_cb = gatt_svr_register_cb;
 
     rc = gatt_svr_init();
     assert(rc == 0);
@@ -181,9 +187,6 @@ main(void)
     /* Set the default device name */
     rc = ble_svc_gap_device_name_set(device_name);
     assert(rc == 0);
-
-    /* Prepare the internal temperature module for measurement */
-   nrf_temp_init();
 
     /* As the last thing, process events from default event queue */
     while (1) {
