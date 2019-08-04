@@ -1,5 +1,6 @@
 #include <nrf_temp.h>
 #include <assert.h>
+#include <stdint.h>
 
 #include "ble_temp_sensor.h"
 
@@ -11,7 +12,8 @@ static struct os_task temp_task;
 
 /* Temperature history buffer */
 #define TEMP_HIST_COUNT (10)
-#define TEMP_SAMPLE_INTERVAL (1000)
+#define TEMP_SAMPLE_INTERVAL_MS (1000)
+static uint32_t temp_sample_interval_ticks = 0;
 static uint16_t temp_history[TEMP_HIST_COUNT];
 static int temp_history_cur = 0;
 static struct os_mutex temp_lock;
@@ -50,18 +52,27 @@ append_temp_measurement(uint16_t temp)
 static void
 temp_task_func(void *arg)
 {
+    /* Loop forever sampling temperature */
     while (1) {
         append_temp_measurement(get_temp_measurement());
 
-        os_time_delay(TEMP_SAMPLE_INTERVAL);
+        os_time_delay(temp_sample_interval_ticks);
     }
 }
 
 void
 start_temp_measurements(void)
 {
-    os_mutex_init(&temp_lock);
+    /* Convert sampling interval in ms to ticks */
+    int rc = os_time_ms_to_ticks(
+        TEMP_SAMPLE_INTERVAL_MS, &temp_sample_interval_ticks);
+    assert(rc == 0);
 
+    /* Init a mutex for controlling access to history buffer */
+    rc = os_mutex_init(&temp_lock);
+    assert(rc == 0);
+
+    /* Init task for periodically sampling temperature */
     os_task_init(&temp_task, "temp_task", temp_task_func, NULL, TEMP_TASK_PRIO,
         OS_WAIT_FOREVER, temp_stack, TEMP_STACK_SIZE);
 }
