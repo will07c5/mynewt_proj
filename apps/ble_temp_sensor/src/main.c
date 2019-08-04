@@ -31,6 +31,7 @@
 
 #include "ble_temp_sensor.h"
 #include "gatt_svr.h"
+#include "temp.h"
 
 /* Log data */
 struct log logger;
@@ -187,6 +188,9 @@ main(void)
     /* Set the default device name */
     rc = ble_svc_gap_device_name_set(device_name);
     assert(rc == 0);
+
+    /* Start periodic temperature measurement */
+    start_temp_measurements();
 
     /* As the last thing, process events from default event queue */
     while (1) {

@@ -26,6 +26,8 @@ extern "C" {
 
 int16_t get_temp_measurement(void);
 
+void start_temp_measurements(void);
+
 #ifdef __cplusplus
 }
 #endif
