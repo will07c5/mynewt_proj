@@ -71,7 +71,10 @@ gatt_svr_chr_cb(
     int16_t temps[TEMP_HIST_COUNT];
     read_temp_measurements(temps, TEMP_HIST_COUNT);
 
-    LOG(INFO, "read value=%i %i %i\n", temps[0], temps[1], temps[2]);
+    LOG(INFO, "read values=");
+    for (int i = 0; i < TEMP_HIST_COUNT; i++)
+        LOG(INFO, "%i ", temps[i]);
+    LOG(INFO, "\n");
 
     rc = os_mbuf_append(ctxt->om, temps, sizeof(temps));
 

@@ -40,7 +40,6 @@ get_temp_measurement(void)
 static void
 append_temp_measurement(uint16_t temp)
 {
-    LOG(INFO, "appending value=%i\n", temp);
     os_error_t err = os_mutex_pend(&temp_lock, OS_TIMEOUT_NEVER);
     assert(err == 0);
 
@@ -50,7 +49,6 @@ append_temp_measurement(uint16_t temp)
 
     err = os_mutex_release(&temp_lock);
     assert(err == 0);
-    LOG(INFO, "done appending\n");
 }
 
 void
