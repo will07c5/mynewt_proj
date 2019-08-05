@@ -24,9 +24,13 @@
 extern "C" {
 #endif
 
+#define TEMP_HIST_COUNT (10)
+
 int16_t get_temp_measurement(void);
 
 void start_temp_measurements(void);
+
+void read_temp_measurements(int16_t *out, int count);
 
 #ifdef __cplusplus
 }

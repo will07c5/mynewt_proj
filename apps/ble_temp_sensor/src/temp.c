@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "ble_temp_sensor.h"
+#include "temp.h"
 
 /* Temperature task */
 #define TEMP_TASK_PRIO (1)
@@ -10,11 +11,14 @@
 static os_stack_t temp_stack[TEMP_STACK_SIZE];
 static struct os_task temp_task;
 
-/* Temperature history buffer */
-#define TEMP_HIST_COUNT (10)
-#define TEMP_SAMPLE_INTERVAL_MS (1000)
+/* Sampling rate */
+#define TEMP_SAMPLE_INTERVAL_MS (100)
 static uint32_t temp_sample_interval_ticks = 0;
-static uint16_t temp_history[TEMP_HIST_COUNT];
+
+/* Temperature history buffer is a circular buffer of temperature readings.
+ * temp_history_cur is the index of the oldest reading (the next one to 
+ * overwrite.) */
+static int16_t temp_history[TEMP_HIST_COUNT];
 static int temp_history_cur = 0;
 static struct os_mutex temp_lock;
 
@@ -33,7 +37,7 @@ get_temp_measurement(void)
     return temp;
 }
 
-void
+static void
 append_temp_measurement(uint16_t temp)
 {
     LOG(INFO, "appending value=%i\n", temp);
@@ -49,6 +53,32 @@ append_temp_measurement(uint16_t temp)
     LOG(INFO, "done appending\n");
 }
 
+void
+read_temp_measurements(int16_t *out, int count)
+{
+    /* Make sure that they don't request more than the history buffer holds */
+    assert(count <= TEMP_HIST_COUNT);
+
+    os_error_t err = os_mutex_pend(&temp_lock, OS_TIMEOUT_NEVER);
+    assert(err == 0);
+
+    for (int i = 0; i < count; i++) {
+        /* Do some slightly weird math since the modulus operator in C isn't
+         * the standard modulus operation. Negative modulus in C results in
+         * a negative number so add TEMP_HIST_COUNT to make sure all indices
+         * stay positive.
+         *
+         * Start at newest reading (the one before temp_history_cur) and
+         * work back to the oldest (temp_history_cur.)  */
+        out[i] = temp_history[
+            (temp_history_cur + TEMP_HIST_COUNT - 1 - i) % TEMP_HIST_COUNT];
+    }
+
+    err = os_mutex_release(&temp_lock);
+    assert(err == 0);
+}
+
+
 static void
 temp_task_func(void *arg)
 {
@@ -56,6 +86,10 @@ temp_task_func(void *arg)
     while (1) {
         append_temp_measurement(get_temp_measurement());
 
+        /* NOTE: In practice this results in a sampling interval of slightly
+         * greater than requested since taking the sample takes time.
+         * Since the sampling rate is fairly low it should be negligible
+         * in this case. */
         os_time_delay(temp_sample_interval_ticks);
     }
 }

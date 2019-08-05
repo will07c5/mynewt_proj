@@ -68,12 +68,12 @@ gatt_svr_chr_cb(
     struct ble_gatt_access_ctxt *ctxt, void *arg)
 {
     int rc;
-    int16_t temp;
-    temp = get_temp_measurement();
+    int16_t temps[TEMP_HIST_COUNT];
+    read_temp_measurements(temps, TEMP_HIST_COUNT);
 
-    LOG(INFO, "read value=%i\n", temp);
+    LOG(INFO, "read value=%i %i %i\n", temps[0], temps[1], temps[2]);
 
-    rc = os_mbuf_append(ctxt->om, &temp, sizeof(temp));
+    rc = os_mbuf_append(ctxt->om, temps, sizeof(temps));
 
     return rc;
 }
