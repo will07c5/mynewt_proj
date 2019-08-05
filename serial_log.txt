@@ -1,0 +1,24 @@
+000000 [ts=0ssb, mod=64 level=0] registered service 0x1800 with handle=1
+000001 [ts=7812ssb, mod=64 level=0] registered characteristic 0x2a00 with def_handle=2 val_handle=3
+000004 [ts=31248ssb, mod=64 level=0] registered characteristic 0x2a01 with def_handle=4 val_handle=5
+000006 [ts=46872ssb, mod=64 level=0] registered service 0x1801 with handle=6
+000008 [ts=62496ssb, mod=64 level=0] registered characteristic 0x2a05 with def_handle=7 val_handle=8
+000011 [ts=85932ssb, mod=64 level=0] registered service 5c3a659e-897e-45e1-b016-007107c96df6 with handle=10
+000014 [ts=109368ssb, mod=64 level=0] registered characteristic 5c3a659e-897e-45e1-b016-007107c96df7 with def_handle=11 val_handle=12
+000018 [ts=140616ssb, mod=64 level=1] adv started
+001439 [ts=11242172ssb, mod=64 level=1] connection established; status=0
+001463 [ts=11429660ssb, mod=64 level=1] mtu update event; conn_handle=1 mtu=256
+001524 [ts=11906192ssb, mod=64 level=1] read values=2975 3000 2950 2975 2950 2950 2975 2925 2975 2950 
+002112 [ts=16499968ssb, mod=64 level=1] read values=2975 2950 2975 2950 2975 2975 2950 2975 2975 3000 
+002576 [ts=20124992ssb, mod=64 level=1] read values=2975 2950 2950 2950 2950 2975 3000 2975 2975 2975 
+002599 [ts=20304668ssb, mod=64 level=1] read values=2975 2950 2975 2950 2950 2950 2950 2975 3000 2975 
+002665 [ts=20820260ssb, mod=64 level=1] read values=2950 2950 2975 2950 2975 2950 2975 2950 2975 2950 
+002684 [ts=20968688ssb, mod=64 level=1] read values=2950 2950 2950 2975 2950 2975 2950 2975 2950 2975 
+003010 [ts=23515592ssb, mod=64 level=1] read values=2950 2975 2975 2975 2950 2975 2975 2975 2975 2850 
+003118 [ts=24359352ssb, mod=64 level=1] read values=2975 2975 2950 2975 2950 2975 2975 2950 2950 2950 
+003367 [ts=26304668ssb, mod=64 level=1] read values=2950 2950 2975 2950 2950 2975 2950 2975 2975 2950 
+003510 [ts=27421848ssb, mod=64 level=1] read values=2950 2950 2975 2975 2975 2975 2950 2975 2975 2975 
+003836 [ts=29968688ssb, mod=64 level=1] read values=2975 2975 2975 2975 2975 2975 2950 2975 2950 2975 
+004742 [ts=37046872ssb, mod=64 level=1] read values=2950 2950 2975 3000 3000 2975 2975 2975 2975 2975 
+004881 [ts=38132804ssb, mod=64 level=1] read values=2975 2975 2975 2975 2975 2975 2975 2950 2950 2950 
+005003 [ts=39085932ssb, mod=64 level=1] read values=2975 2975 3000 2975 2975 2975 2975 2975 2975 2975
